@@ -41,7 +41,7 @@
             $result=$aesops->addRoundKey($state, $w, 0); //add roundkey 0 for this example
             break;
          case "encrypt":
-            $result=$aesops->encrypt($state);
+            $result=$aesops->encrypt($state, $key);
             break;
          case "decrypt":
             $result=$aesops->decrypt($state);
@@ -106,9 +106,29 @@
       array(0x36, 0x00, 0x00, 0x00) ); 
 
 
-      public function encrypt($input)
+      public function encrypt($input, $key)
       {
-         $_SESSION['debug'] .= "^^^^^^^^^^^^^^^^^^^^^^^^^^^\nEncryptie van een blok data is \nnog niet geimplementeerd, \nzie opdrachten studiewijzer\n^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
+         $_SESSION['debug'] .= "Starting encryption\n";
+
+         $expandedKey = $this->keyExpansion($key);
+
+         $input = $this->addRoundKey($input, $expandedKey, 0);
+
+         //start encryption loop
+         for($i=0; $i<9; $i++){
+            $_SESSION['debug'] .= "Running round " . $i . "\n";
+
+            $input = $this->subBytes($input);
+            $input = $this->shiftRows($input);
+            $input = $this->mixColumns($input);
+            $input = $this->addRoundKey($input, $expandedKey, $i);
+         }
+
+         $_SESSION['debug'] .= "Running round 10\n";
+         $input = $this->subBytes($input);
+         $input = $this->shiftRows($input);
+         $input = $this->addRoundKey($input, $expandedKey, 10);
+
          return($input);
       } //end function encrypt
 
