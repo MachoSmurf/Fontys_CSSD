@@ -113,7 +113,7 @@
          $expandedKey = $this->keyExpansion($key);
 
          $input = $this->addRoundKey($input, $expandedKey, 0);
-         $_SESSION['debug'] .= "state after addroundkey: " . $iop->convertStateToByteArray($input);
+         $_SESSION['debug'] .= "\n\nstate after addroundkey: " . $iop->convertStateToByteArray($input) . "\n\n";
 
          //start encryption loop
          for($i=1; $i<10; $i++){
