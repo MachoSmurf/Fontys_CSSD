@@ -71,7 +71,7 @@
        *  This class implements onse part of the AES algortihm, the subBytes operation.
        *  It is meant for demonstration purpose only.
       **/
-       
+     // $this->iop = new ioOperations();
       // sBox is the pre-computed multiplicative inverse in GF(2^8) used in subBytes() and also in the keyExpansion.
       private static $sBox = array(
       0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
@@ -105,17 +105,18 @@
       array(0x1b, 0x00, 0x00, 0x00),
       array(0x36, 0x00, 0x00, 0x00) ); 
 
-
       public function encrypt($input, $key)
       {
+         $iop = new ioOperations();
          $_SESSION['debug'] .= "Starting encryption\n";
 
          $expandedKey = $this->keyExpansion($key);
 
          $input = $this->addRoundKey($input, $expandedKey, 0);
+         $_SESSION['debug'] .= "state after addroundkey: " . $iop->convertStateToByteArray($input);
 
          //start encryption loop
-         for($i=0; $i<9; $i++){
+         for($i=1; $i<10; $i++){
             $_SESSION['debug'] .= "Running round " . $i . "\n";
 
             $input = $this->subBytes($input);
